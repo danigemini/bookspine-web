@@ -1,0 +1,5 @@
+{
+  "name": "BookSpine AI Scanner",
+  "description": "Escanea lomos de libros y extrae metadatos usando Gemini",
+  "requestFramePermissions": ["camera"]
+}
