@@ -8,10 +8,9 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
 
   const genAI = new GoogleGenerativeAI(API_KEY);
   
-  // Usamos el modelo solicitado
+// Usamos el modelo estable y ultrarrápido
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-3-pro-image-preview",
-    tools: [{ googleSearch: {} }] as any
+    model: "gemini-1.5-flash"
   });
 
   const imageParts = await Promise.all(
