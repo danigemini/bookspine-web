@@ -8,10 +8,11 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
 
   const genAI = new GoogleGenerativeAI(API_KEY);
   
-// Usamos el modelo estable y ultrarrápido
-  const model = genAI.getGenerativeModel({ 
-    model: "gemini-1.5-flash"
-  });
+// Usamos el modelo estable forzando el canal beta
+  const model = genAI.getGenerativeModel(
+    { model: "gemini-1.5-flash" },
+    { apiVersion: "v1beta" }
+  );
 
   const imageParts = await Promise.all(
     images.map(async (file) => ({
