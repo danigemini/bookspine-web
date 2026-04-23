@@ -8,9 +8,9 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
 
   const genAI = new GoogleGenerativeAI(API_KEY);
   
-// Usamos la familia Gemini 3 que sabemos que sí está habilitada en tu cuenta
+// Usamos el modelo exacto que vimos que sí existe en tu cuenta
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-3-flash" 
+    model: "gemini-3-pro-image-preview" 
   });
 
   const imageParts = await Promise.all(
