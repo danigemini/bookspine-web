@@ -8,7 +8,7 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
 
   const genAI = new GoogleGenerativeAI(API_KEY);
   
-// Usamos el modelo exacto que vimos que sí existe en tu cuenta
+  // Usamos el modelo exacto que vimos que sí existe en tu cuenta
   const model = genAI.getGenerativeModel({ 
     model: "gemini-3-pro-image-preview" 
   });
@@ -22,9 +22,9 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
     }))
   );
 
+  // Quitamos la mención a Google Search para evitar conflictos
   const prompt = `Analiza estas imágenes de lomos de libros. 
-  Extrae el título y autor de cada libro de forma precisa. 
-  Usa la búsqueda de Google para validar los nombres si no son legibles.
+  Extrae el título y autor de cada libro basándote exclusivamente en lo que ves en la imagen.
   
   Devuelve el resultado estrictamente en este formato por cada libro (una línea por libro):
   TITULO: [título] | AUTOR: [autor]`;
@@ -33,14 +33,8 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
   const response = await result.response;
   const text = response.text();
 
-  // Extraer enlaces de fuentes de Google Search
+  // Simplificamos las fuentes ya que no usamos el motor de búsqueda externo
   const sources: string[] = [];
-  const groundingChunks = (response as any).candidates?.[0]?.groundingMetadata?.groundingChunks;
-  if (groundingChunks) {
-    groundingChunks.forEach((chunk: any) => {
-      if (chunk.web?.url) sources.push(chunk.web.url);
-    });
-  }
 
   // Parsear el texto línea a línea para evitar errores de JSON
   return text.split('\n')
@@ -54,7 +48,7 @@ export async function analyzeBooks(images: File[]): Promise<BookResult[]> {
         id: `book-${Date.now()}-${index}`,
         title,
         author,
-        sources: [...new Set(sources)]
+        sources: []
       };
     });
 }
